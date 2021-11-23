@@ -1,6 +1,17 @@
 var searchButton = $("#searchBtn");
 var apiKey = "6d18642e9c95b935e37fbca984ddbf75";
 
+// loop to persist searchedCities as savedCities
+for (var i = 0; i < localStorage.length; i++) {
+
+    var city = localStorage.getItem(i);
+    var searchedCities = $(".list-group");
+
+    searchedCities.append('<button type="button" class="btn btn-warning my-1">' + city + "</button>");
+}
+// City key count 
+var savedCities = 0;
+
 // Search function on click
 searchButton.click(function(){
 
@@ -50,9 +61,29 @@ searchButton.click(function(){
                 method: "GET"
             }).then(function (response) {
 
-                var currentUV = currentTemp.append("<div class='col-12'>" + "UV Index: " + response.value + "</div>").addClass("card-text");
-                currentUV.addClass("UV");
-                currentTemp.append(currentUV);
+                var uvIndexLevel = response.value
+                // UV index: 1 - 2  Green
+                if(uvIndexLevel < 3){
+                    var currentUV = currentTemp.append("<div class='col-3 bg-success'>" + "UV Index: " + uvIndexLevel + "</div>").addClass("card-text");
+                    currentUV.addClass("UV");
+                    currentTemp.append(currentUV);
+                }
+                    else if( uvIndexLevel < 6){
+                        var currentUV = currentTemp.append("<div class='col-3 bg-warning'>" + "UV Index: " + uvIndexLevel + "</div>").addClass("card-text");
+                        currentUV.addClass("UV");
+                        currentTemp.append(currentUV);
+                    }
+                        else if(uvIndexLevel < 8){
+                            var currentUV = currentTemp.append("<div class='col-3 bg-danger'>" + "UV Index: " + uvIndexLevel + "</div>").addClass("card-text");
+                            currentUV.addClass("UV");
+                            currentTemp.append(currentUV);                
+                        }
+                            else {
+                                var currentUV = currentTemp.append("<div class='col-3 bg-dark'>" + "UV Index: " + uvIndexLevel + "</div>").addClass("card-text");
+                                currentUV.addClass("UV");
+                                currentTemp.append(currentUV);
+                            }
+                
             });
         });
 
@@ -71,7 +102,7 @@ searchButton.click(function(){
                 var fiveDayUTC1 = new Date(response.list[i].dt * 1000);
                 fiveDayUTC1 = fiveDayUTC1.toLocaleDateString("en-US");
 
-                fiveDayDiv.append("<div class='m-2 p-1 fiveDayColor'>" + "<p>" + fiveDayUTC1 + "</p>" + `<img src="https://openweathermap.org/img/wn/${response.list[i].weather[0].icon}@2x.png">` + "<p>" + "Temperature: " + response.list[i].main.temp + "</p>" + "<p>" + "Humidity: " + response.list[i].main.humidity + "%" + "</p>" + "</div>");
+                fiveDayDiv.append("<div class='m-1 p-2 fiveDayColor'>" + "<p>" + fiveDayUTC1 + "</p>" + `<img src="https://openweathermap.org/img/wn/${response.list[i].weather[0].icon}@2x.png">` + "<p>" + "Temperature: " + response.list[i].main.temp + "</p>" + "<p>" + "Humidity: " + response.list[i].main.humidity + "%" + "</p>" + "</div>");
 
 
             })
