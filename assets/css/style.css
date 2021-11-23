@@ -3,3 +3,8 @@
     color: #ff7f35;
     -webkit-text-stroke: 2px #fff2ce;
 }
+
+.fiveDayColor {
+    background-color: #ffe17e;
+    border-radius: 3px;
+}
