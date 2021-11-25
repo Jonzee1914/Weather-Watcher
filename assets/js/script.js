@@ -7,13 +7,18 @@ for (var i = 0; i < localStorage.length; i++) {
     var city = localStorage.getItem(i);
     var searchedCities = $(".list-group");
 
-    searchedCities.append('<button type="button" class="btn btn-warning my-1">' + city + "</button>");
+    searchedCities.append('<button type="button" class="btn btn-warning my-1" attr="' + city + '">' + city + "</button>");
 }
 // City key count 
 var savedCities = 0;
 
 // Search function on click
-searchButton.click(function(){
+searchButton.click(function() {
+    citySearch();
+});
+
+// Weather data from search
+function citySearch() {
 
     var city = $(".cityInput").val();
 
@@ -29,9 +34,9 @@ searchButton.click(function(){
         $.ajax({url: urlCurrent, method: "GET"}).then(function (response) {
             // list-group append a city button
             var searchedCities = $(".list-group");
-            searchedCities.append('<button type="button" class="btn btn-warning my-1">' + response.name + "</button>");
+            searchedCities.append('<button type="button" class="btn btn-warning my-1" attr="' + city + '">' + city + "</button>");
             // Set to local storage
-            localStorage.setItem(savedCities, response.name);
+            localStorage.setItem(savedCities, city);
             savedCities = savedCities + 1;
 
             // Current Weather Card
@@ -41,16 +46,16 @@ searchButton.click(function(){
 
             // Fix Date 
             var timeUTC = new Date(response.dt * 1000);
-            currentWeather.append("<h3 class='col-10 font-weight-bold justify-content-start'>" + response.name + " " + timeUTC.toLocaleDateString("en-US") + "</h3>");
+            currentWeather.append("<h3 class='col font-weight-bold justify-content-start'>" + response.name + " " + timeUTC.toLocaleDateString("en-US") + "</h3>");
             currentWeather.append(`<img class="col-2 justify-content-end" src="https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png">`);
             // Add Temp
             var currentTemp = currentWeather.append("<div class='col'></div>");
             currentWeather.append(currentTemp);
-            currentTemp.append("<div class='col-12'>" + "Temperature: " + response.main.temp + "</div>");
+            currentTemp.append("<div class='col-12'>" + "Temperature: " + response.main.temp + "° F" + "</div>");
             // Humidity
             currentTemp.append("<div class='col-12'>" + "Humidity: " + response.main.humidity + "%" + "</div>");
             //Wind Speed: 
-            currentTemp.append("<div class='col-12'>" + "Wind Speed: " + response.wind.speed + "</div>");
+            currentTemp.append("<div class='col-12'>" + "Wind Speed: " + response.wind.speed + "mph " + "</div>");
 
             // All the stuff for the pointless UV index...
             var uvIndex = `https://api.openweathermap.org/data/2.5/uvi?appid=b8ecb570e32c2e5042581abd004b71bb&lat=${response.coord.lat}&lon=${response.coord.lon}`;
@@ -79,7 +84,7 @@ searchButton.click(function(){
                             currentTemp.append(currentUV);                
                         }
                             else {
-                                var currentUV = currentTemp.append("<div class='col-3 bg-dark'>" + "UV Index: " + uvIndexLevel + "</div>").addClass("card-text");
+                                var currentUV = currentTemp.append("<div class='col-3 text-white bg-dark'>" + "UV Index: " + uvIndexLevel + "</div>").addClass("card-text");
                                 currentUV.addClass("UV");
                                 currentTemp.append(currentUV);
                             }
@@ -109,15 +114,4 @@ searchButton.click(function(){
 
         });
     }
-});
-
-// loop to persist searchedCities as savedCities
-for (var i = 0; i < localStorage.length; i++) {
-
-    var city = localStorage.getItem(i);
-    var searchedCities = $(".list-group");
-
-    searchedCities.append('<button type="button" class="btn btn-warning my-1">' + city + "</button>");
-}
-// City key count 
-var savedCities = 0;
+};
