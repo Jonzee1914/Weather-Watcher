@@ -1,5 +1,5 @@
-var searchButton = $("#searchBtn");
 var apiKey = "6d18642e9c95b935e37fbca984ddbf75";
+var btn = document.querySelector("#searchBtn");
 
 // loop to persist searchedCities as savedCities
 for (var i = 0; i < localStorage.length; i++) {
@@ -7,20 +7,23 @@ for (var i = 0; i < localStorage.length; i++) {
     var city = localStorage.getItem(i);
     var searchedCities = $(".list-group");
 
-    searchedCities.append('<button type="button" class="btn btn-warning my-1" attr="' + city + '">' + city + "</button>");
+    searchedCities.append('<button type="button" class="searchedCity btn btn-warning my-1" attr="' + city + '">' + city + "</button>");
 }
 // City key count 
 var savedCities = 0;
 
 // Search function on click
-searchButton.click(function() {
-    citySearch();
+$(document).on("click", ".searchedCity", function(event) {
+    event.preventDefault();
+
+    var city = $(this).attr("attr");
+    citySearch(city);
 });
 
 // Weather data from search
-function citySearch() {
+var citySearch = function(city) {
 
-    var city = $(".cityInput").val();
+    // var city = $(".cityInput").val();
 
     // Variables for current and 5 day weather
     var urlCurrent = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&Appid=" + apiKey + "&units=imperial";
@@ -34,10 +37,14 @@ function citySearch() {
         $.ajax({url: urlCurrent, method: "GET"}).then(function (response) {
             // list-group append a city button
             var searchedCities = $(".list-group");
-            searchedCities.append('<button type="button" class="btn btn-warning my-1" attr="' + city + '">' + city + "</button>");
-            // Set to local storage
             localStorage.setItem(savedCities, city);
             savedCities = savedCities + 1;
+            searchedCities.append('<button type="button" class="searchedCity btn btn-warning my-1" attr="' + city + '">' + city + "</button>");
+
+                
+            // Set to local storage
+            // localStorage.setItem(savedCities, city);
+            // savedCities = savedCities + 1;
 
             // Current Weather Card
             var currentWeather = $(".currentWeather").append("<div class = 'row'>").addClass("card-body");
@@ -115,6 +122,24 @@ function citySearch() {
         });
     }
 };
-$(document.body).on('click', '.btn-warning' ,function(){
+// function listener on click button
+var search = function(event){
+    event.preventDefault();
 
-});
+    //getting the value of the input
+    var inputElement = document.querySelector("#searchCity");
+    var textInput = inputElement.value.trim();
+
+    if(inputElement.value === ""){
+        alert("Weather Dashbord\n   You must enter a City");
+        return;
+    }
+    // if the value is a string 
+    else{
+   
+        citySearch(textInput);
+
+    }
+};
+
+btn.addEventListener("click", search);
