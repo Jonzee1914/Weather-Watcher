@@ -1,6 +1,6 @@
 var apiKey = "6d18642e9c95b935e37fbca984ddbf75";
 var btn = document.querySelector("#searchBtn");
-
+ 
 // loop to persist searchedCities as savedCities
 for (var i = 0; i < localStorage.length; i++) {
 
@@ -8,11 +8,12 @@ for (var i = 0; i < localStorage.length; i++) {
     var searchedCities = $(".list-group");
 
     searchedCities.append('<button type="button" class="searchedCity btn btn-warning my-1" attr="' + city + '">' + city + "</button>");
+    savedCities = savedCities + 1;
 }
 // City key count 
 var savedCities = 0;
 
-// Search function on click
+// Saved city search function on click
 $(document).on("click", ".searchedCity", function(event) {
     event.preventDefault();
 
@@ -37,14 +38,11 @@ var citySearch = function(city) {
         $.ajax({url: urlCurrent, method: "GET"}).then(function (response) {
             // list-group append a city button
             var searchedCities = $(".list-group");
-            localStorage.setItem(savedCities, city);
-            savedCities = savedCities + 1;
-            searchedCities.append('<button type="button" class="searchedCity btn btn-warning my-1" attr="' + city + '">' + city + "</button>");
-
+                searchedCities.append('<button type="button" class="searchedCity btn btn-warning my-1" attr="' + city + '">' + city + "</button>");
                 
-            // Set to local storage
-            // localStorage.setItem(savedCities, city);
-            // savedCities = savedCities + 1;
+                // Set to local storage
+                localStorage.setItem(savedCities, city);
+                savedCities = savedCities + 1;
 
             // Current Weather Card
             var currentWeather = $(".currentWeather").append("<div class = 'row'>").addClass("card-body");
@@ -122,7 +120,7 @@ var citySearch = function(city) {
         });
     }
 };
-// function listener on click button
+// Search bar city search
 var search = function(event){
     event.preventDefault();
 
@@ -141,5 +139,5 @@ var search = function(event){
 
     }
 };
-
+// listener for search button click
 btn.addEventListener("click", search);
