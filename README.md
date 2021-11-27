@@ -31,4 +31,4 @@ https://jonzee1914.github.io/Weather-Watcher/
 ![alt text](https://github.com/Jonzee1914/Weather-Watcher/blob/main/weather-watcher-demo.gif?raw=true)
 
 ## Built by
-Jonzee with ❤️ (mostly 😡)
+Jonzee with ❤️ (but mostly 😡)
